@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia de Amor</title>
+    <!-- Use a very elegant script font similar to the image -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Herr+Von+Muellerhoff&family=Tangerine:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="logo">
+            <img src="logo.jpg" alt="Logo" class="app-logo">
+            <h1 id="main-title">Nuestra historia de amor</h1>
+        </div>
+        <div class="header-actions">
+            <!-- Used to go back from photo view to album view -->
+            <button id="btn-back" class="btn hidden">Volver a carpetas</button>
+            <button id="btn-select-mode" class="btn hidden">Seleccionar</button>
+            <button id="btn-add-photo" class="btn hidden">Agregar Foto</button>
+            <button id="btn-delete-album" class="btn hidden" style="border-color: #d9534f; color: #d9534f;">Eliminar
+                Álbum</button>
+            <button id="btn-create-album" class="btn primary-btn">Crear Álbum</button>
+        </div>
+
+        <!-- Action bar that appears when photos are selected -->
+        <div id="selection-actions" class="selection-actions-bar header-actions hidden">
+            <span id="selection-count" style="font-weight: bold; color: #d6336c; font-size: 1.2rem;">0
+                seleccionadas</span>
+            <button id="btn-action-delete" class="btn"
+                style="border-color: #d9534f; color: #d9534f; padding: 0.4rem 1.2rem;">Eliminar</button>
+            <button id="btn-action-move" class="btn" style="padding: 0.4rem 1.2rem;">Mover</button>
+            <button id="btn-action-copy" class="btn" style="padding: 0.4rem 1.2rem;">Copiar</button>
+            <button id="btn-action-download" class="btn" style="padding: 0.4rem 1.2rem;">Descargar</button>
+            <button id="btn-cancel-select" class="btn" style="padding: 0.4rem 1.2rem;">Cancelar</button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <main class="main-content">
+            <!-- View for albums (folders) -->
+            <div id="albums-view" class="view">
+                <div id="folder-grid" class="folder-grid">
+                    <!-- Folders will be loaded here -->
+                </div>
+            </div>
+
+            <!-- View for photos inside an album -->
+            <div id="photos-view" class="view hidden">
+                <div id="photo-grid" class="photo-grid">
+                    <!-- Photos will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Photo Viewer Modal -->
+    <div id="photo-viewer" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <button id="prev-btn" class="nav-btn">&lt;</button>
+            <img id="viewer-img" src="" alt="Álbum Foto">
+            <button id="next-btn" class="nav-btn">&gt;</button>
+        </div>
+    </div>
+
+    <!-- Context Menu for Photos -->
+    <div id="photo-context-menu" class="context-menu hidden">
+        <ul>
+            <li id="menu-view">👁 Ver</li>
+            <li id="menu-share">🔗 Compartir</li>
+            <li id="menu-download">⬇ Descargar</li>
+            <li class="separator"></li>
+            <li id="menu-delete" class="danger">🗑 Eliminar</li>
+        </ul>
+    </div>
+
+    <!-- Floating Hearts Container -->
+    <div id="hearts-container"></div>
+
+    <!-- Prompt Modal for creating album -->
+    <div id="prompt-modal" class="modal hidden">
+        <div class="modal-content"
+            style="flex-direction: column; background: white; padding: 3rem; border-radius: 20px; text-align: center; max-width: 450px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <h3
+                style="margin-bottom: 1.5rem; color: #d6336c; font-family: 'Comic Sans MS', cursive; font-size: 1.8rem;">
+                Nombre del nuevo álbum</h3>
+            <input type="text" id="album-name-input"
+                style="width: 100%; padding: 15px; border: 3px solid #ECA329; border-radius: 15px; font-size: 1.3rem; margin-bottom: 2rem; font-family: 'Comic Sans MS', cursive; outline: none; text-align: center; color: #4A3B32;"
+                placeholder="Ejemplo: Nuestro Viaje">
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="btn-cancel-prompt" class="btn"
+                    style="background: #f0f0f0; border: 2px solid #ccc; font-size: 1.2rem; padding: 0.8rem 1.5rem;">Cancelar</button>
+                <button id="btn-confirm-prompt" class="btn primary-btn"
+                    style="font-size: 1.2rem; padding: 0.8rem 1.5rem;">Crear Álbum</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert/Confirm Modal for deleting album -->
+    <div id="delete-modal" class="modal hidden">
+        <div class="modal-content"
+            style="flex-direction: column; background: white; padding: 3rem; border-radius: 20px; text-align: center; max-width: 450px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <h3
+                style="margin-bottom: 1.5rem; color: #d9534f; font-family: 'Comic Sans MS', cursive; font-size: 1.8rem;">
+                Eliminar Álbum</h3>
+            <p style="margin-bottom: 1.5rem; font-family: 'Comic Sans MS', cursive; font-size: 1.2rem; color: #4A3B32;">
+                Escribe EXACTAMENTE el nombre del álbum para eliminarlo permanentemente:</p>
+            <input type="text" id="delete-album-input"
+                style="width: 100%; padding: 15px; border: 3px solid #d9534f; border-radius: 15px; font-size: 1.3rem; margin-bottom: 2rem; font-family: 'Comic Sans MS', cursive; outline: none; text-align: center; color: #d9534f;"
+                placeholder="Nombre del álbum...">
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="btn-cancel-delete" class="btn"
+                    style="background: #f0f0f0; border: 2px solid #ccc; font-size: 1.2rem; padding: 0.8rem 1.5rem;">Cancelar</button>
+                <button id="btn-confirm-delete" class="btn"
+                    style="background: #d9534f; color: white; border: none; font-size: 1.2rem; padding: 0.8rem 1.5rem; font-weight: bold;">Eliminar
+                    TODO</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

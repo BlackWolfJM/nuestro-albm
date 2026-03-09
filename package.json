@@ -1,0 +1,38 @@
+{
+  "name": "galeria-para-marjo",
+  "version": "1.0.0",
+  "description": "El álbum de nuestras fotos",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder -w"
+  },
+  "build": {
+    "appId": "com.nuestro.album.secreto",
+    "productName": "Nuestro Album",
+    "compression": "store",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "logo.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "keywords": [],
+  "author": "Jeral",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^40.8.0",
+    "electron-builder": "^26.8.1"
+  },
+  "dependencies": {
+    "firebase": "^12.10.0"
+  }
+}
